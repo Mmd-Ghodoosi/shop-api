@@ -9,11 +9,14 @@ import {
   Put,
   Session,
 } from '@nestjs/common';
+import { Serialize } from 'interceptor/user-interceptor';
+import { UserExpose } from './Dto/user-expose';
 import { UsersService } from './users.service';
 import { userDto } from './Dto/user-dto';
 import { UserEditDto } from './Dto/userEdit-dto';
 
 @Controller('users')
+@Serialize(UserExpose)
 export class UsersController {
   constructor(private userService: UsersService) {}
   @Post('createUser')
