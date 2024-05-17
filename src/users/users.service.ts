@@ -12,11 +12,14 @@ export class UsersService {
   }
 
   async FindAUser(id: string) {
-    return await this.res.findById(parseInt(id)).exec();
+    return await this.res.findById(id).exec();
+  }
+  async FindUsers(email: string) {
+    return await this.res.find({email}).exec();
   }
 
   async deleteUser(id: string) {
-    return await this.res.findByIdAndDelete(parseInt(id)).exec();
+    return await this.res.findByIdAndDelete(id).exec();
   }
   async EditUser(id: string, User: Partial<Users>) {
     return await this.res.findByIdAndUpdate(id, User, { new: true }).exec();

@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Session,
 } from '@nestjs/common';
 import { Serialize } from 'interceptor/user-interceptor';
@@ -14,22 +15,49 @@ import { UserExpose } from './Dto/user-expose';
 import { UsersService } from './users.service';
 import { userDto } from './Dto/user-dto';
 import { UserEditDto } from './Dto/userEdit-dto';
+import { AuthService } from './auth.service';
 
 @Controller('users')
 @Serialize(UserExpose)
 export class UsersController {
-  constructor(private userService: UsersService) {}
-  @Post('createUser')
-  async createUser(@Body() body: userDto, @Session() session: any) {
-    const user = await this.userService.CreateUser(body.email, body.password);
+  constructor(
+    private userService: UsersService,
+    private authService: AuthService,
+  ) {}
+
+  @Get('signout')
+  async signout(@Session() session: any) {
+    session.userId = null;
+    return 'logged out';
+  }
+
+  @Post('signup')
+  async signup(@Body() body: userDto, @Session() session: any) {
+    const user = await this.authService.signup(body.email, body.password);
     session.userId = user.id;
     if (user) return 'User has been created';
   }
+
+  @Post('signin')
+  async signin(@Body() body: userDto, @Session() session: any) {
+    const user = await this.authService.signin(body.email, body.password);
+    session.userId = user.id;
+    if (user) return 'User has been signed in';
+  }
+
   @Get('findAUser/:id')
   async findAUser(@Param('id') id: string) {
     const user = await this.userService.FindAUser(id);
     if (!user) {
       throw new NotFoundException('There is no user with this id');
+    }
+    return user;
+  }
+  @Get('findUsers')
+  async findUsers(@Query('email') email: string) {
+    const user = await this.userService.FindUsers(email);
+    if (!user) {
+      throw new NotFoundException('There is no user');
     }
     return user;
   }
