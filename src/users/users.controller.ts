@@ -10,6 +10,7 @@ import {
   Query,
   Session,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { Serialize } from 'interceptor/user-interceptor';
 import { UserExpose } from './Dto/user-expose';
@@ -18,6 +19,7 @@ import { userDto } from './Dto/user-dto';
 import { UserEditDto } from './Dto/userEdit-dto';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './deconator/currentUser';
+import { AuthGuard } from 'Guard/auth.guard';
 
 @Controller('users')
 @Serialize(UserExpose)
@@ -28,10 +30,8 @@ export class UsersController {
   ) {}
 
   @Get('currentUser')
+  @UseGuards(AuthGuard)
   currentUser(@CurrentUser() user: string) {
-    if (!user) {
-      throw new UnauthorizedException('You must login first');
-    }
     return user;
   }
 
