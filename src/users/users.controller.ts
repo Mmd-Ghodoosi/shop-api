@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Session,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Serialize } from 'interceptor/user-interceptor';
 import { UserExpose } from './Dto/user-expose';
@@ -16,6 +17,7 @@ import { UsersService } from './users.service';
 import { userDto } from './Dto/user-dto';
 import { UserEditDto } from './Dto/userEdit-dto';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './deconator/currentUser';
 
 @Controller('users')
 @Serialize(UserExpose)
@@ -24,6 +26,14 @@ export class UsersController {
     private userService: UsersService,
     private authService: AuthService,
   ) {}
+
+  @Get('currentUser')
+  currentUser(@CurrentUser() user: string) {
+    if (!user) {
+      throw new UnauthorizedException('You must login first');
+    }
+    return user;
+  }
 
   @Get('signout')
   async signout(@Session() session: any) {
