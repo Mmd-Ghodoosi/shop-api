@@ -9,12 +9,14 @@ import {
   Put,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { productDto } from './dto/product-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductEditDto } from './dto/productEdit-dto';
+import { AuthGuard } from 'Guard/auth.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -22,6 +24,7 @@ export class ProductsController {
 
   @Post('createProduct')
   @UseInterceptors(FileInterceptor('picture'))
+  @UseGuards(AuthGuard)
   async createProduct(@Body() body: productDto, @UploadedFile() picture) {
     console.log(picture);
 
@@ -36,8 +39,8 @@ export class ProductsController {
   }
 
   @Get('findProducts')
-  async findProducts(@Query('name') name: string) {
-    const product = await this.productService.FindProducts(name);
+  async findProducts() {
+    const product = await this.productService.FindProducts();
     if (!product) {
       throw new NotFoundException('There is no product with this name');
     }
