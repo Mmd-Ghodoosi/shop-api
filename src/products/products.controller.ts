@@ -17,6 +17,8 @@ import { productDto } from './dto/product-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductEditDto } from './dto/productEdit-dto';
 import { AuthGuard } from 'Guard/auth.guard';
+import { CurrentUser } from 'src/users/deconator/currentUser';
+import { Users } from 'src/users/users.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -25,7 +27,11 @@ export class ProductsController {
   @Post('createProduct')
   @UseInterceptors(FileInterceptor('picture'))
   @UseGuards(AuthGuard)
-  async createProduct(@Body() body: productDto, @UploadedFile() picture) {
+  async createProduct(
+    @Body() body: productDto,
+    @UploadedFile() picture,
+    @CurrentUser() user: Users,
+  ) {
     console.log(picture);
 
     const product = await this.productService.CreateProduct(
@@ -33,8 +39,8 @@ export class ProductsController {
       body.price,
       body.code,
       picture.originalname,
+      user,
     );
-    console.log(product);
     if (product) return 'Product has been created';
   }
 
@@ -48,8 +54,8 @@ export class ProductsController {
   }
 
   @Get('findAProduct/:id')
-  async findAProduct(@Param('id') id: string) {
-    const product = await this.productService.FindAProduct(id);
+  async findAProduct(@Param('id') id: string, @CurrentUser() user: Users) {
+    const product = await this.productService.FindAProduct(id, user);
     if (!product) {
       throw new NotFoundException('There is no product with this id');
     }
