@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Products } from './products.entity';
 import { Model } from 'mongoose';
 import { Users } from 'src/users/users.entity';
+import { ProductEditDto } from './dto/productEdit-dto';
 
 @Injectable()
 export class ProductsService {
@@ -34,7 +35,7 @@ export class ProductsService {
   async DeleteProduct(id: string) {
     return await this.res.findByIdAndDelete(id).exec();
   }
-  async EditProduct(id: string, Product: Partial<Products>) {
-    return await this.res.findByIdAndUpdate(id, Product, { new: true }).exec();
+  async updateProduct(id: string, attrs: Partial<Products>) {
+    return this.res.findByIdAndUpdate(id, attrs, { new: true }).exec();
   }
 }

@@ -6,14 +6,13 @@ export class ProductEditDto {
   name: string;
 
   @IsOptional()
-  @IsNumber()
   price: number;
 
   @IsOptional()
   @IsString()
   code: string;
 
-  @IsOptional()
-  @IsString()
-  picture: string;
+  // @IsOptional()
+  // @IsString()
+  // picture: string;
 }

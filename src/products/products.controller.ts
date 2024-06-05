@@ -71,12 +71,23 @@ export class ProductsController {
     return 'Product has been deleted';
   }
 
-  @Put('editProduct/:id')
-  async editProduct(@Param('id') id: string, @Body() body: ProductEditDto) {
-    const product = await this.productService.EditProduct(id, body);
+  @Put(':id')
+  @UseInterceptors(FileInterceptor('picture'))
+  async editProduct(
+    @Param('id') id: string,
+    @Body() body: ProductEditDto,
+    @UploadedFile() picture,
+  ) {
+    const product = await this.productService.updateProduct(id, {
+      name: body.name,
+      price: body.price,
+      code: body.code,
+      picture: picture.originalname,
+    });
     if (!product) {
       throw new NotFoundException('There is no product with this id');
     }
+    console.log(product);
     return 'Product has been updated';
   }
 }
