@@ -15,10 +15,19 @@ export class ProductsService {
     name: string,
     price: number,
     code: string,
+    colors: number,
+    description: string,
     picture: string,
     user: Users,
   ) {
-    const Product = await this.res.create({ name, price, code, picture });
+    const Product = await this.res.create({
+      name,
+      price,
+      code,
+      colors,
+      description,
+      picture,
+    });
     await (Product.user = user);
 
     return Product;
@@ -27,10 +36,8 @@ export class ProductsService {
   async FindProducts() {
     return await this.res.find().exec();
   }
-  async FindAProduct(id: string, user: Users) {
-    const Product = await this.res.findById(id).exec();
-    await (Product.user = user);
-    return Product;
+  async FindAProduct(id: string) {
+    return await this.res.findById(id).exec();
   }
   async DeleteProduct(id: string) {
     return await this.res.findByIdAndDelete(id).exec();

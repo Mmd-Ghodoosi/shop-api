@@ -13,6 +13,12 @@ export class Products {
   code: string;
 
   @Prop({ required: true })
+  colors: number;
+
+  @Prop({ required: true })
+  description: string;
+
+  @Prop({ required: true })
   picture: string;
 
   @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Users' }] })

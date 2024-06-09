@@ -32,12 +32,12 @@ export class ProductsController {
     @UploadedFile() picture,
     @CurrentUser() user: Users,
   ) {
-    console.log(picture);
-
     const product = await this.productService.CreateProduct(
       body.name,
       body.price,
       body.code,
+      body.colors,
+      body.description,
       picture.originalname,
       user,
     );
@@ -54,8 +54,8 @@ export class ProductsController {
   }
 
   @Get('findAProduct/:id')
-  async findAProduct(@Param('id') id: string, @CurrentUser() user: Users) {
-    const product = await this.productService.FindAProduct(id, user);
+  async findAProduct(@Param('id') id: string) {
+    const product = await this.productService.FindAProduct(id);
     if (!product) {
       throw new NotFoundException('There is no product with this id');
     }
