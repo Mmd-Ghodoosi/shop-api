@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
+import { Products } from 'src/products/products.entity';
 
 @Schema()
 export class Users {

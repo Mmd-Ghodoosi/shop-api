@@ -54,8 +54,8 @@ export class ProductsController {
   }
 
   @Get('findAProduct/:id')
-  async findAProduct(@Param('id') id: string) {
-    const product = await this.productService.FindAProduct(id);
+  async findAProduct(@Param('id') id: string, @CurrentUser() user: Users) {
+    const product = await this.productService.FindAProduct(id, user);
     if (!product) {
       throw new NotFoundException('There is no product with this id');
     }
