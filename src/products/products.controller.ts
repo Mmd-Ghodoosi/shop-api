@@ -26,7 +26,7 @@ export class ProductsController {
 
   @Post('createProduct')
   @UseInterceptors(FileInterceptor('picture'))
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   async createProduct(
     @Body() body: productDto,
     @UploadedFile() picture,
@@ -35,7 +35,6 @@ export class ProductsController {
     const product = await this.productService.CreateProduct(
       body.name,
       body.price,
-      body.code,
       body.colors,
       body.description,
       picture.originalname,
@@ -81,13 +80,13 @@ export class ProductsController {
     const product = await this.productService.updateProduct(id, {
       name: body.name,
       price: body.price,
-      code: body.code,
+      colors:body.colors,
+      description:body.description,
       picture: picture.originalname,
     });
     if (!product) {
       throw new NotFoundException('There is no product with this id');
     }
-    console.log(product);
     return 'Product has been updated';
   }
 }

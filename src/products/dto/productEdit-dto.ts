@@ -9,10 +9,9 @@ export class ProductEditDto {
   price: number;
 
   @IsOptional()
-  @IsString()
-  code: string;
+  colors: number;
 
-  // @IsOptional()
-  // @IsString()
-  // picture: string;
+  @IsOptional()
+  @IsString()
+  description: string;
 }

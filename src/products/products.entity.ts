@@ -10,9 +10,6 @@ export class Products {
   price: number;
 
   @Prop({ required: true })
-  code: string;
-
-  @Prop({ required: true })
   colors: number;
 
   @Prop({ required: true })

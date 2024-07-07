@@ -13,7 +13,6 @@ export class ProductsService {
   async CreateProduct(
     name: string,
     price: number,
-    code: string,
     colors: number,
     description: string,
     picture: string,
@@ -22,7 +21,6 @@ export class ProductsService {
     const Product = await this.res.create({
       name,
       price,
-      code,
       colors,
       description,
       picture,

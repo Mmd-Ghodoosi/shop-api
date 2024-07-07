@@ -8,8 +8,6 @@ export class productDto {
   @IsOptional()
   price: number;
 
-  @IsString()
-  code: string;
 
   // @IsNumber()
   @IsOptional()
