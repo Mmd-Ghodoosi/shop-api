@@ -6,12 +6,14 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CartModule } from './cart/cart.module';
 const cookie = require('cookie-session');
 
 @Module({
   imports: [
     UsersModule,
     ProductsModule,
+    CartModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
