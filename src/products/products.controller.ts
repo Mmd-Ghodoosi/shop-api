@@ -26,7 +26,7 @@ export class ProductsController {
 
   @Post('createProduct')
   @UseInterceptors(FileInterceptor('picture'))
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   async createProduct(
     @Body() body: productDto,
     @UploadedFile() picture,
@@ -80,8 +80,8 @@ export class ProductsController {
     const product = await this.productService.updateProduct(id, {
       name: body.name,
       price: body.price,
-      colors:body.colors,
-      description:body.description,
+      colors: body.colors,
+      description: body.description,
       picture: picture.originalname,
     });
     if (!product) {

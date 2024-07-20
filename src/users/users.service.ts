@@ -15,7 +15,7 @@ export class UsersService {
     return await this.res.findById(id).exec();
   }
   async FindUsers(email: string) {
-    return await this.res.find({email}).exec();
+    return await this.res.find({ email }).exec();
   }
 
   async deleteUser(id: string) {

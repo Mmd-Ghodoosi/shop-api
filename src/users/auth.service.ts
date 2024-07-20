@@ -8,10 +8,11 @@ const scrypt = promisify(_scrypt);
 export class AuthService {
   constructor(private userService: UsersService) {}
   async signup(email: string, password: string) {
-    
     const users = await this.userService.FindUsers(email);
     if (users.length) {
-      throw new BadRequestException('email in use');
+      throw new BadRequestException(
+        'ایمیل قبلا استفاده شده است لطفا ایمیل دیگری انتخاب کنید',
+      );
     }
 
     const salt = randomBytes(8).toString('hex');
