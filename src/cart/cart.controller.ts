@@ -6,7 +6,9 @@ import {
   NotFoundException,
   Param,
   Post,
+  UploadedFile,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CartDto } from './dto/cart-dto';
@@ -18,20 +20,24 @@ export class CartController {
 
   @Post('addToCart')
   @UseInterceptors(FileInterceptor('picture'))
-  async addToCart(@Body() body: CartDto) {
+  async addToCart(@Body() body: CartDto, @UploadedFile() picture) {
+    console.log(body);
+
     const addedToCart = await this.cartService.addToCart(
       body.name,
       body.price,
       body.colors,
       body.description,
       body.picture,
+      body.email,
     );
+    console.log(addedToCart);
     if (addedToCart) return 'added to cart';
   }
 
   @Get('findCartData')
-  async findCartData() {
-    const cartData = await this.cartService.findCartData();
+  async findCartData(@Query('email') email: string) {
+    const cartData = await this.cartService.findCartData(email);
     if (!cartData) {
       throw new NotFoundException('There is no data with in this cart');
     }

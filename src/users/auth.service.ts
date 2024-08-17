@@ -24,13 +24,13 @@ export class AuthService {
   async signin(email: string, password: string) {
     const [user] = await this.userService.FindUsers(email);
     if (!user) {
-      throw new BadRequestException('there is no user');
+      throw new BadRequestException('این ایمیل وجود ندارد');
     }
     const [salt, hashed] = user.password.split('.');
     const hash = (await scrypt(password, salt, 32)) as Buffer;
 
     if (hashed !== hash.toString('hex')) {
-      throw new BadRequestException('bad password');
+      throw new BadRequestException('رمز عبور یا ایمیل صحیح نیست ');
     }
     return user;
   }

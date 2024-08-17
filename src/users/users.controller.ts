@@ -9,7 +9,6 @@ import {
   Put,
   Query,
   Session,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { Serialize } from 'interceptor/user-interceptor';
@@ -22,7 +21,7 @@ import { CurrentUser } from './deconator/currentUser';
 import { AuthGuard } from 'Guard/auth.guard';
 
 @Controller('users')
-@Serialize(UserExpose)
+// @Serialize(UserExpose)
 export class UsersController {
   constructor(
     private userService: UsersService,
@@ -52,7 +51,7 @@ export class UsersController {
   async signin(@Body() body: userDto, @Session() session: any) {
     const user = await this.authService.signin(body.email, body.password);
     session.userId = user.id;
-    if (user) return 'User has been signed in';
+    if (user) return { id: user.id, email: user.email };
   }
 
   @Get('findAUser/:id')

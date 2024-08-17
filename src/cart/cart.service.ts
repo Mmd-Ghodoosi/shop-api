@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { model, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { Cart } from './cart.entity';
 
 @Injectable()
@@ -12,14 +12,25 @@ export class CartService {
     colors: number,
     description: string,
     picture: string,
+    email: string,
   ) {
-    return await this.res.create({ name, price, colors, description, picture });
+    const addedToCart = await this.res.create({
+      name,
+      price,
+      colors,
+      description,
+      picture,
+      email,
+    });
+    return addedToCart;
   }
-  async findCartData() {
-    return await this.res.find().exec();
+  async findCartData(email: string) {
+    const User = await this.res.find({ email }).exec();
+    return User;
   }
   async findACartData(id: string) {
-    return await this.res.findById(id).exec();
+    const User = await this.res.findById(id).exec();
+    return User;
   }
   async removeDataFromCart(id: string) {
     return await this.res.findByIdAndDelete(id).exec();

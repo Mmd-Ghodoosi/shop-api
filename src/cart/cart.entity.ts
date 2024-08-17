@@ -16,6 +16,9 @@ export class Cart {
 
   @Prop({ required: true })
   picture: string;
+
+  @Prop({ required: true })
+  email: string;
 }
 
 export const CartSchema = SchemaFactory.createForClass(Cart);

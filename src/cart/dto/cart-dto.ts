@@ -17,4 +17,7 @@ export class CartDto {
 
   @IsString()
   picture: string;
+  
+  @IsString()
+  email:string
 }

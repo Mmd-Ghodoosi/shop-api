@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Users } from './users.entity';
+import { scrypt as _scrypt, randomBytes } from 'crypto';
+import { promisify } from 'util';
+const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class UsersService {
@@ -22,6 +25,13 @@ export class UsersService {
     return await this.res.findByIdAndDelete(id).exec();
   }
   async EditUser(id: string, User: Partial<Users>) {
-    return await this.res.findByIdAndUpdate(id, User, { new: true }).exec();
+    const user = await this.res.findById(id).exec();
+    const salt = randomBytes(8).toString('hex');
+    const hash = (await scrypt(User.password, salt, 32)) as Buffer;
+
+    const result = salt + '.' + hash.toString('hex');
+
+    user.password = result;
+    return await this.res.findByIdAndUpdate(id, user, { new: true }).exec();
   }
 }
